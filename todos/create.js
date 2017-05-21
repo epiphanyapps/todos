@@ -3,43 +3,44 @@
 const uuid = require('uuid');
 const dynamodb = require('./dynamodb');
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
-const s3 = new AWS.S3({accessKeyId: 'AKIAI2Q5YKPJ3P3EQC7A', secretAccessKey: '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'});
+const s3 = new AWS.S3(accessKeyId: 'AKIAI2Q5YKPJ3P3EQC7A', secretAccessKey: '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');
+//
 
 module.exports.create = (event, context, callback) => {
+	
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
   
   if (typeof data.text !== 'string') {
-
       const missingTextResponse = {
         statusCode: 400,
         body: JSON.stringify({ "message": "Must have a valid text value" }),
         headers: {"x-custom-header" : "My Header Value"}
       };
-
-      callback(new Error('Couldn\'t create the todo item.'), missingTextResponse);
-    return;
+      callback(null, missingTextResponse);
+      return;
   }
   
   if (typeof data.image !== 'string') {
-	
-    const missingImageResponse = {
-      statusCode: 400,
-      body: JSON.stringify({ "message": "Must have a valid image value, base64String" }),
-      headers: {"x-custom-header" : "My Header Value"}
+      const missingImageResponse = {
+        statusCode: 400,
+        body: JSON.stringify({ "message": "Must have a valid image value, base64String" }),
+        headers: {"x-custom-header" : "My Header Value"}
     };
-	
-    callback(new Error('Couldn\'t create the todo item.'), missingImageResponse);
-    return;
+      callback(null, missingImageResponse);
+      return;
   }
   
   var buffer = new Buffer(data.image, 'base64')
   const s3Params =  {
-     Bucket: process.env.BUCKET,
-     Key: "finall/image.txt",
+     Bucket: 'serverless-rest-api-with-serverlessdeploymentbuck-q8cjc7ohwwsn',
+     Key: "final_image.txt",
      Body: buffer
   }
+  console.log(process.env.BUCKET)
+  console.log("processsss.env.BUCKET")
   console.log(s3Params)
+  console.log("right before s3.putObject")
   
   s3.putObject(s3Params, function(err, data) {
 	    if (err) {
