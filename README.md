@@ -45,6 +45,11 @@ Example Result:
 ```bash
 curl -H "Content-Type:application/json" http://localhost:3000/todos
 ```
+```bash
+curl -H "Content-Type:application/json" https://yms8uiijgb.execute-api.us-east-1.amazonaws.com/dev/todos
+```
+
+
 
 Example output:
 ```bash
