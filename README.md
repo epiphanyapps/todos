@@ -88,3 +88,18 @@ curl -X DELETE -H "Content-Type:application/json" http://localhost:3000/todos/<i
 ```
 
 No output
+
+
+### Notes
+Misc. configuration notes and and bullet points on architecture will be noted here.
+
+* Managed to get the S3 `putObject` call successfully authorized and working by attaching `serverless-rest-api-with-dynamodb9-dev-us-east-1-lambdaRole` with the  `AmazonS3FullAccess` policy.
+* Using a separate bucket named `serverless-resources` for now.
+
+### TODO
+This list is very informal and will likely change often.
+
+* add permissions to resources
+* figure out proper way to generate profile image file name
+* currently need to make all images public manually in aws console
+* image data is corrupted

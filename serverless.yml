@@ -1,4 +1,4 @@
-service: serverless-rest-api-with-dynamodb7
+service: serverless-rest-api-with-dynamodb9
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
@@ -36,7 +36,7 @@ provider:
       Action:
         - s3:PutObject
       Resource: "arn:aws:s3:::${self:custom.bucket}/*"
-	  
+
 
 functions:
   create:

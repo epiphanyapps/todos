@@ -1,84 +1,102 @@
-	'use strict';
+'use strict';
 
 const uuid = require('uuid');
 const dynamodb = require('./dynamodb');
+
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
-const s3 = new AWS.S3(accessKeyId: 'AKIAI2Q5YKPJ3P3EQC7A', secretAccessKey: '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');
-//
+const s3 = new AWS.S3();
+
+var shortid = require('shortid');
+
 
 module.exports.create = (event, context, callback) => {
-	
-  const timestamp = new Date().getTime();
-  const data = JSON.parse(event.body);
-  
-  if (typeof data.text !== 'string') {
-      const missingTextResponse = {
-        statusCode: 400,
-        body: JSON.stringify({ "message": "Must have a valid text value" }),
-        headers: {"x-custom-header" : "My Header Value"}
-      };
-      callback(null, missingTextResponse);
-      return;
-  }
-  
-  if (typeof data.image !== 'string') {
-      const missingImageResponse = {
-        statusCode: 400,
-        body: JSON.stringify({ "message": "Must have a valid image value, base64String" }),
-        headers: {"x-custom-header" : "My Header Value"}
-    };
-      callback(null, missingImageResponse);
-      return;
-  }
-  
-  var buffer = new Buffer(data.image, 'base64')
-  const s3Params =  {
-     Bucket: 'serverless-rest-api-with-serverlessdeploymentbuck-q8cjc7ohwwsn',
-     Key: "final_image.txt",
-     Body: buffer
-  }
-  console.log(process.env.BUCKET)
-  console.log("processsss.env.BUCKET")
-  console.log(s3Params)
-  console.log("right before s3.putObject")
-  
-  s3.putObject(s3Params, function(err, data) {
-	    if (err) {
-  		  	console.log(":()")
-			console.log(err); // an error occurred
-			console.log("---------")
-			console.log(err.stack);
-  		  	console.log(":()")
-		} else{
-			console.log(data);  // successful response
-		}               
-	  });
 
-  const params = {
-    TableName: process.env.DYNAMODB_TABLE,
-    Item: {
-      id: uuid.v1(),
-      text: data.text,
-      checked: false,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    },
-  };
+	const timestamp = new Date().getTime();
+	const data = JSON.parse(event.body);
 
-  // write the todo to the database
-  dynamodb.put(params, (error) => {
-    // handle potential errors
-    if (error) {
-      console.error(error);
-      callback(new Error('Couldn\'t create the todo item.'));
-      return;
-    }
+	if (typeof data.text !== 'string') {
+		const missingTextResponse = {
+			statusCode: 400,
+			body: JSON.stringify({ "message": "Must have a valid text value" }),
+			headers: {"x-custom-header" : "My Header Value"}
+		};
+		callback(null, missingTextResponse);
+		return;
+	}
 
-    // create a response
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(params.Item),
-    };
-     callback(null, response);
-  });
+	var result = null;
+	var mime = data.image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+	if (mime && mime.length) {
+		result = mime[1];
+	}
+
+
+	if (result !== "image/png") {
+		const incorrectMimeType = {
+			statusCode: 400,
+			body: JSON.stringify({ "message": "Must have a valid png image value, encoded as base64String" }),
+			headers: {"x-custom-header" : "My Header Value"}
+		};
+		callback(null, incorrectMimeType);
+		return;
+	}
+
+	var buffer = new Buffer(data.image, 'base64');
+	var imagePrefix = 'todo-images/' + shortid.generate() + '.png';
+	const s3Params =  {
+		Bucket: 'serverless-resources',
+		Key: imagePrefix,
+		Body: buffer
+	};
+
+	var putObjectPromise = s3.putObject(s3Params).promise();
+
+	putObjectPromise.then(function(data) {
+		console.log('Success');
+		console.log(data);  // successful response
+
+		const imageName = 'http://serverless-resources.s3.amazonaws.com/' + imagePrefix;
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE,
+			Item: {
+				id: uuid.v1(),
+				text: data.text,
+				checked: false,
+				createdAt: timestamp,
+				updatedAt: timestamp,
+				image: imageName
+			},
+		};
+
+		// write the todo to the database
+		dynamodb.put(params, (error) => {
+			// handle potential errors
+			if (error) {
+				console.error(error);
+				callback(new Error('Couldn\'t create the todo item.'));
+				return;
+			}
+
+			// create a response
+			const response = {
+				statusCode: 200,
+				body: JSON.stringify(params.Item),
+			};
+			callback(null, response);
+		});
+
+	}).catch(function(err) {
+		console.log(err);
+
+		// create a response
+		const s3PutResponse = {
+			statusCode: 500,
+			body: JSON.stringify({ "message": "Unable to load image to S3" }),
+		};
+		callback(null, s3PutResponse);
+
+	});
+
+
+
 };
