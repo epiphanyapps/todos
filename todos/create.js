@@ -44,9 +44,10 @@ module.exports.create = (event, context, callback) => {
 	var buffer = new Buffer(data.image, 'base64');
 	var imagePrefix = 'todo-images/' + shortid.generate() + '.png';
 	const s3Params =  {
-		Bucket: 'serverless-resources',
+		Bucket: process.env.BUCKET,
 		Key: imagePrefix,
-		Body: buffer
+		Body: buffer,
+		ACL: 'public-read'
 	};
 
 	var putObjectPromise = s3.putObject(s3Params).promise();

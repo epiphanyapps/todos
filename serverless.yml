@@ -1,4 +1,4 @@
-service: serverless-rest-api-with-dynamodb9
+service: serverless-rest-api-with-dynamodb22
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
@@ -7,7 +7,7 @@ plugins:
   - serverless-offline
 
 custom:
-  bucket: "waltermvp"
+  bucket: "serverless-resources"
   dynamodb:
     start:
       port: 8000
@@ -21,7 +21,7 @@ provider:
   runtime: nodejs4.3
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
-    BUCKET: waltermvp
+    BUCKET: ${self:custom.bucket}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -34,7 +34,10 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
     - Effect: Allow
       Action:
-        - s3:PutObject
+        - "s3:PutObject"
+        - "s3:PutObjectAcl"
+        - "s3:GetObject"
+        - "s3:DeleteObject"
       Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 
 
@@ -83,7 +86,7 @@ resources:
   Resources:
     TodosDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
+      DeletionPolicy: Delete #Retain
       Properties:
         AttributeDefinitions:
           -
@@ -97,3 +100,20 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
+
+    # UploadBucket:
+    #   Type: AWS::S3::Bucket
+    #   Properties:
+    #     BucketName: ${self:custom.bucket}
+    #     AccessControl: PublicRead
+    #     CorsConfiguration:
+    #       CorsRules:
+    #       - AllowedMethods:
+    #         - GET
+    #         - PUT
+    #         - POST
+    #         - HEAD
+    #         AllowedOrigins:
+    #         - "*"
+    #         AllowedHeaders:
+    #         - "*"
