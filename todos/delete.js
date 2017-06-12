@@ -24,7 +24,7 @@ module.exports.delete = (event, context, callback) => {
 
     if (typeof data.Attributes.image == 'string') {
       // We need to delete image too
-      var cleanKey = data.Attributes.image.replace('http://serverless-resources.s3.amazonaws.com/', "");
+      var cleanKey = data.Attributes.image.replace('http://' + process.env.BUCKET + '.s3.amazonaws.com/', "");
 
       const s3Params =  {
         Bucket: process.env.BUCKET,
