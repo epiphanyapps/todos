@@ -42,14 +42,51 @@ provider:
 
 
 functions:
+
+  createUser:
+    handler: users/createUser.createUser
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+  listUsers:
+    handler: users/listUsers.listUsers
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+  getUser:
+    handler: users/getUser.getUser
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+  updateUser:
+    handler: users/updateUser.updateUser
+    events:
+      - http:
+          path: users/{id}
+          method: put
+          cors: true
+  deleteUser:
+    handler: users/deleteUser.deleteUser
+    events:
+      - http:
+          path: users/{id}
+          method: delete
+          cors: true
+
+
   create:
     handler: todos/create.create
     events:
       - http:
-          path: todos
+          path: todo
           method: post
           cors: true
-
   list:
     handler: todos/list.list
     events:
@@ -57,7 +94,6 @@ functions:
           path: todos
           method: get
           cors: true
-
   get:
     handler: todos/get.get
     events:
@@ -65,7 +101,6 @@ functions:
           path: todos/{id}
           method: get
           cors: true
-
   update:
     handler: todos/update.update
     events:
@@ -73,7 +108,6 @@ functions:
           path: todos/{id}
           method: put
           cors: true
-
   delete:
     handler: todos/delete.delete
     events:

@@ -8,7 +8,7 @@ const s3 = new AWS.S3();
 
 var shortid = require('shortid');
 
-module.exports.create = (event, context, callback) => {
+module.exports.createUser = (event, context, callback) => {
 
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
