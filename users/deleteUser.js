@@ -4,7 +4,7 @@ const dynamodb = require('./dynamodb');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
-module.exports.delete = (event, context, callback) => {
+module.exports.deleteUser = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {

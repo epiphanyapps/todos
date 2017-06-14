@@ -51,7 +51,7 @@ functions:
           method: post
           cors: true
   listUsers:
-    handler: users/listUsers.listUsers
+    handler: users/listUser.listUser
     events:
       - http:
           path: users
@@ -84,7 +84,7 @@ functions:
     handler: todos/create.create
     events:
       - http:
-          path: todo
+          path: todos
           method: post
           cors: true
   list:

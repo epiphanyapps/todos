@@ -2,7 +2,7 @@
 
 const dynamodb = require('./dynamodb');
 
-module.exports.get = (event, context, callback) => {
+module.exports.getUser = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
