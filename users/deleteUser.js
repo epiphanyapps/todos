@@ -39,7 +39,7 @@ module.exports.deleteUser = (event, context, callback) => {
         const response = {
           statusCode: 200,
           body: JSON.stringify({
-            "message": "Successfully deleted ${data.Attributes.id} with image."
+            "message": "Successfully deleted " + data.Attributes.id "with image."
           }),
         };
         callback(null, response);
@@ -52,7 +52,7 @@ module.exports.deleteUser = (event, context, callback) => {
         const s3PutResponse = {
           statusCode: 500,
           body: JSON.stringify({
-            "message": "Unable to delete image in S3 for ${data.Attributes.id}"
+            "message": "Unable to delete image in S3 for " + data.Attributes.id
           }),
         };
         callback(null, s3PutResponse);
@@ -63,7 +63,7 @@ module.exports.deleteUser = (event, context, callback) => {
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          "message": "Successfully deleted ${data.Attributes.id}"
+          "message": "Successfully deleted " + data.Attributes.id
         }),
       };
       callback(null, response);
