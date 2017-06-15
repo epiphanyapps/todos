@@ -1,6 +1,6 @@
 'use strict';
 
-const dynamodb = require('./dynamodb');
+const dynamodb = require('../shared/dynamodb');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 

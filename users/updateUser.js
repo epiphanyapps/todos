@@ -2,7 +2,7 @@
 
 const dynamodb = require('./dynamodb');
 
-module.exports.update = (event, context, callback) => {
+module.exports.updateUser = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
 

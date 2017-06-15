@@ -1,7 +1,7 @@
 'use strict';
 
 const uuid = require('uuid');
-const dynamodb = require('./dynamodb');
+const dynamodb = require('../shared/dynamodb');
 
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 const s3 = new AWS.S3();
