@@ -57,8 +57,8 @@ module.exports.create = (event, context, callback) => {
 
   // var buffer = new Buffer(data.image, 'base64');
   var buffer = new Buffer(data.image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-
-  var imagePrefix = 'todo-images/' + shortid.generate() + "." + imageType;
+  var imagePrefix = `todo-images/${shortid.generate()}.${imageType}`;
+  // var imagePrefix = 'todo-images/' + shortid.generate() + "." + imageType;
   const s3Params = {
     Bucket: process.env.BUCKET,
     Key: imagePrefix,
@@ -81,6 +81,9 @@ module.exports.create = (event, context, callback) => {
         id: uuid.v1(),
         text: data.text,
         checked: false,
+        first: data.first,
+        last: data.last,
+        dob: data.dob,
         createdAt: timestamp,
         updatedAt: timestamp,
         image: imageName
