@@ -73,6 +73,10 @@ module.exports.create = (event, context, callback) => {
   putObjectPromise.then(function(data) {
     console.log('Success');
     console.log(data); // successful response
+    console.log("eyyy"); // successful response
+    console.log(data.first); // successful response
+    console.log(data.last); // successful response
+    console.log("eyyy"); // successful response
 
     const imageName = 'http://' + process.env.BUCKET + '.s3.amazonaws.com/' + imagePrefix;
     const params = {
