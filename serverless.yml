@@ -126,6 +126,9 @@ resources:
           -
             AttributeName: id
             AttributeType: S
+          -
+            AttributeName: first
+            AttributeType: S
         KeySchema:
           -
             AttributeName: id

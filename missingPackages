@@ -1,0 +1,5 @@
+NPM packages that need to be installed manually
+
+xmlbuilder
+jmespath
+xml2js

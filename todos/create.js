@@ -57,8 +57,8 @@ module.exports.create = (event, context, callback) => {
 
   // var buffer = new Buffer(data.image, 'base64');
   var buffer = new Buffer(data.image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-
-  var imagePrefix = 'todo-images/' + shortid.generate() + "." + imageType;
+  var imagePrefix = `todo-images/${shortid.generate()}.${imageType}`;
+  // var imagePrefix = 'todo-images/' + shortid.generate() + "." + imageType;
   const s3Params = {
     Bucket: process.env.BUCKET,
     Key: imagePrefix,
@@ -73,6 +73,10 @@ module.exports.create = (event, context, callback) => {
   putObjectPromise.then(function(data) {
     console.log('Success');
     console.log(data); // successful response
+    console.log("eyyy"); // successful response
+    console.log(data.first); // successful response
+    console.log(data.last); // successful response
+    console.log("eyyy"); // successful response
 
     const imageName = 'http://' + process.env.BUCKET + '.s3.amazonaws.com/' + imagePrefix;
     const params = {
@@ -81,6 +85,9 @@ module.exports.create = (event, context, callback) => {
         id: uuid.v1(),
         text: data.text,
         checked: false,
+        first: data.first,
+        last: data.last,
+        dob: data.dob,
         createdAt: timestamp,
         updatedAt: timestamp,
         image: imageName

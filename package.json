@@ -7,10 +7,13 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.12.0",
+    "datauri": "^1.0.5",
+    "jmespath": "^0.15.0",
     "serverless-dynamodb-local": "^0.2.18",
     "serverless-offline": "^3.8.3",
-    "uuid": "^2.0.3",
     "shortid": "^2.2.8",
-    "datauri": "^1.0.5"
+    "uuid": "*",
+    "xml2js": "^0.4.17",
+    "xmlbuilder": "^9.0.1"
   }
 }

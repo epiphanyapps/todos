@@ -87,6 +87,8 @@ module.exports.createUser = (event, context, callback) => {
         id: uuid.v1(),
         text: data.text,
         checked: false,
+	first: data.first,
+	last: data.last,
         createdAt: timestamp,
         updatedAt: timestamp,
         first: data.first,
