@@ -33,9 +33,9 @@ module.exports.deleteUser = (event, context, callback) => {
 
       var deleteObjectPromise = s3.deleteObject(s3Params).promise();
 
-      deleteObjectPromise.then(function(data) {
+      deleteObjectPromise.then(function(promiseData) {
         console.log('Success');
-        console.log(data); // successful response
+        console.log(promiseData); // successful response
         const response = {
           statusCode: 200,
           body: JSON.stringify({
