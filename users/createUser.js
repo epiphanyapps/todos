@@ -27,6 +27,20 @@ module.exports.createUser = (event, context, callback) => {
     return;
   }
 
+  if (typeof data.dob !== 'number') {
+    const missingDOBResponse = {
+      statusCode: 400,
+      body: JSON.stringify({
+        "message": "Must have a date of birth in following format. `JavaScript getTime() Method 	\"dob\": 1497531574648'"
+      }),
+      headers: {
+        "x-custom-header": "My Header Value"
+      }
+    };
+    callback(null, missingDOBResponse);
+    return;
+  }
+
   var result = null;
   var mime = data.image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
   if (mime && mime.length) {
@@ -81,6 +95,7 @@ module.exports.createUser = (event, context, callback) => {
         checked: false,
 	      first: data.first,
 	      last: data.last,
+        dob: data.dob,
         createdAt: timestamp,
         updatedAt: timestamp,
         image: imageName
