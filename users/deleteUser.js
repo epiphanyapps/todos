@@ -39,7 +39,7 @@ module.exports.deleteUser = (event, context, callback) => {
         const response = {
           statusCode: 200,
           body: JSON.stringify({
-            "message": "Successfully deleted " + data.Attributes.id "with image."
+            "message": "Successfully deleted " + data.Attributes.id + "with image."
           }),
         };
         callback(null, response);
