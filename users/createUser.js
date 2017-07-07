@@ -12,8 +12,6 @@ module.exports.createUser = (event, context, callback) => {
 
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-  console.log("parsed data");
-  console.log(data);
 
   if (typeof data.text !== 'string') {
     const missingTextResponse = {
@@ -73,12 +71,6 @@ module.exports.createUser = (event, context, callback) => {
   var putObjectPromise = s3.putObject(s3Params).promise();
 
   putObjectPromise.then(function(promiseData) {
-    console.log('Success');
-    console.log(promiseData);
-    console.log("eyyyy");
-    console.log(data.first);
-    console.log(data.last);
-    console.log(data.text);
 
     const imageName = 'http://' + process.env.BUCKET + '.s3.amazonaws.com/' + imagePrefix;
     const params = {
@@ -87,18 +79,13 @@ module.exports.createUser = (event, context, callback) => {
         id: uuid.v1(),
         text: data.text,
         checked: false,
-	first: data.first,
-	last: data.last,
+	      first: data.first,
+	      last: data.last,
         createdAt: timestamp,
         updatedAt: timestamp,
-        first: data.first,
-        last: data.last,
         image: imageName
       },
     };
-    console.log("some stuff");
-    console.log(params);
-
 
     // write the todo to the database
     dynamodb.put(params, (error) => {
